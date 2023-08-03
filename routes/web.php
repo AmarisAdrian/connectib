@@ -17,4 +17,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('inicio');
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('inicio');
     Route::get('/usuarios', [App\Http\Controllers\UserController::class, 'userList'])->name('usuario.userList');
+    Route::get('/getState/{id}', [App\Http\Controllers\UserController::class, 'getState'])->name('getState');
+    Route::get('/getCity/{id}', [App\Http\Controllers\UserController::class, 'getCity'])->name('getCity');
+    Route::post('/guardarusuario', [App\Http\Controllers\UserController::class, 'addUser'])->name('usuario.addUser');
 });

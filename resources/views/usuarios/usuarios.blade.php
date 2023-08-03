@@ -1,10 +1,5 @@
 @extends('layouts.app')
 @section('content')
-@if (session('status'))
-    <div class="alert alert-success">
-        {{ session('status') }}
-    </div>
-@endif
 <div class="container">
     <div class="d-flex justify-content-between">
         <h4><i class="fa fa-list" aria-hidden="true"></i> Lista usuarios</h4>
@@ -71,24 +66,107 @@
                     @endif
                 </tbody>        
             </table>
-            {{ $data->links() }}
+            <div class="d-flex justify-content-between">
+                {{ $data->links() }}
+                <form class="d-flex align-items-end">
+                 <input name="paginacion" class="form-control-sm mb-3 " type="number" @if(isset($_GET["paginacion"]) && !is_null($_GET["paginacion"])) value="{{$_GET["paginacion"]}}" @else value="10" @endif>
+                </form>
+            </div>
         </div>
     </div>
     <!--MODAL CREAR USUARIO-->
     <div class="modal fade" id="modal_crear_usuario"  aria-hidden="true">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog">
         <div class="modal-content" >
         <div class="modal-header bg-primary text-light">
             <h5 class="modal-title"><i class="fa fa-user-plus" aria-hidden="true"></i> Crear usuario</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form method="POST" name="" class="" action="#">
-            
+            <form method="POST" method="POST" action="{{route('usuario.addUser')}}">
+              <div class="row">
+                {{csrf_field()}}
+                 <div class="mb-3">
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" class="form-control border border-input" id="email" name="email" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="password">Contraseña *</label>
+                        <input type="password" class="form-control border border-input" id="password" name="password" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="password_repeat">Repetir contraseña *</label>
+                        <input type="password" class="form-control border border-input" id="password_repeat" name="password_repeat" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="nombre">Nombre completo *</label>
+                        <input type="text" class="form-control border border-input" id="nombre" name="nombre" required>
+                    </div>
+                </div>
+                 <div class="mb-3">
+                    <div class="form-group">
+                        <label for="celular">Celular*</label>
+                        <input type="number" class="form-control border border-input" id="celular" name="celular">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="cedula">cedula</label>
+                        <input type="number" class="form-control border border-input" id="cedula" name="cedula" required>
+                    </div>
+                </div>   
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="fecha_nacimiento">Fecha nacimiento *</label>
+                        <input type="date" class="form-control border border-input" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="pais">Pais *</label>
+                        <select id="pais" name="pais" data-i="" data-url="{{url('/')}}/getState/" class="pais form-control border border-input">
+                            <option value="">-- Seleccionar --</option>
+                            @foreach($pais as $paises)
+                                <option value="{{ $paises->id }}">{{ $paises->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="departamento">Departamento *</label>
+                        <select id="departamento" name="departamento"  data-url="{{url('/')}}/getCity/" class="form-control border border-input text-lowercase">
+                            <option value="">-- Seleccionar --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="ciudad">Ciudad *</label>
+                        <select id="ciudad" name="ciudad" class="form-control border border-input text-lowercase">
+                            <option value="">-- Seleccionar --</option>
+
+                        </select>
+                    </div>
+                </div>
+                    <br><br>
+                    <div class="form-group m-0">
+                        <button class="btn btn-primary" id="btn_guardar_usuario"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar usuario</button>
+                    </div>
+                </div>
             </form>
         </div>
      </div>
     </div>
     </div>
 </div>
+<script src="{{asset('assets/js/usuario.js')}}"></script>
+
 @endsection
