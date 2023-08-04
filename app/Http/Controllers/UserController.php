@@ -8,6 +8,7 @@ use App\Country;
 use App\State;
 use App\City;
 use App\Models\User as modelUser;
+use Illuminate\Support\Facades\Validator;
 class UserController extends Controller{
 
     /*
@@ -70,20 +71,123 @@ class UserController extends Controller{
     }
     /*
     Registra un nuevo usuario
-    @return list */
+    @return void */
     public function addUser(request $request){
         try{
-           $data = $request->only('cedula','password','email','nombre','celular','cedula','ciudad','fecha_nacimiento');
-            $result = modelUser::addUser($data);
+           $data = $request->only('cedula','nombre','email','celular','codigo_ciudad','fecha_nacimiento','password','password_confirmation');
+            $result = self::sendAddUser($data);
             if ($result['success']) {
                 session()->put("success","Usuario registrado exitosamente");
             } else {
-                session()->put("error","Usuario no pudo ser registrado".$result['errors']);
+                session()->put("error","Usuario no pudo ser registrado. ".$result['errors']);
             }
         }catch(\Exception $ex){
             session::put("error",$ex->getMessage());
         }
         return redirect()->route('usuario.userList');
-
     }
+      /*
+    Consulta los datos de usuario desde la lista de usuario al modal actualizar usuario 
+    @return void */
+    public function getUser($id){
+        $user = User::where("id",$id)->first();
+        $pais = Country::get();
+        return view('usuarios.modal_actualizar_usuario',["user"=>$user,"pais"=>$pais]);
+    }
+      /*
+    Elimina el usuario
+    @return json */
+    public function deleteUser($id){
+        try{
+            User::where("id",$id)->delete();
+            $response = json_encode(array("msg"=>"Usuario eliminado exitosamente","status"=>201));
+         }catch(\Exception $ex){
+            $response = json_encode(array("msg"=>$ex->getMessage(),"status"=>200));
+         }
+         echo $response;
+    }
+
+   /* Actualiza un usuario
+    @return void */
+    public function updateUser(request $request){
+        try{
+           $data = $request->only('id','nombre','celular','codigo_ciudad','fecha_nacimiento','password','password_confirmation');
+            $result = self::sendaUpdateUser($data);
+            if ($result['success']) {
+                session()->put("success","Usuario actualizado exitosamente");
+            } else {
+                session()->put("error","Usuario no pudo ser actualizado. ".$result['errors']);
+            }
+        }catch(\Exception $ex){
+            session::put("error",$ex->getMessage());
+        }
+        return redirect()->route('usuario.userList');
+    }
+     /* realiza las validaciones y luego registra los datos
+    @return void */
+    private static function sendAddUser($data){
+        $validator = Validator::make($data,modelUser::$validacion);
+        if($validator->fails()){
+            return [
+                'success'=>false,
+                'errors'=> $validator->errors(),
+            ];
+        }
+        $mayor_edad = self::validarMayorEdad($data['fecha_nacimiento']);
+        if($mayor_edad){                    
+            $data['password'] = bcrypt($data['password']);
+            $user = new User($data);
+            $user->save();
+            return [
+                'success'=>true,
+                'user'=> $user
+            ];
+        }else{
+            return [
+                'success'=>false,
+                'errors'=> 'Para registrar el usuario debe ser mayor de edad'
+            ];
+        }
+    }
+      /* realiza las validaciones y luego actualiza el suuario
+    @return void */
+    private static function sendaUpdateUser($data){
+        $validator = Validator::make($data,modelUser::$validacionActualizar);
+        $mayor_edad = self::validarMayorEdad($data['fecha_nacimiento']);
+        if($validator->fails()){
+            return [
+                'success'=>false,
+                'errors'=> $validator->errors(),
+            ];
+        }
+        if($mayor_edad){                    
+            $data['password'] = bcrypt($data['password']);
+            $user = User::find($data['id']);   
+            if (!$user) {
+                return [
+                    'success' => false,
+                    'errors' => 'El usuario no existe',
+                ];
+            }
+            $user->fill($data);
+            $user->save();
+                return [
+                    'success'=>true,
+                    'user'=> $user
+                ];
+        }else{
+            return [
+                'success'=>false,
+                'errors'=> 'Para registrar el usuario debe ser mayor de edad'
+            ];
+        }
+    }
+     /* validar mayor de edad
+    @return void */
+    private static function validarMayorEdad($fecha_nacimiento){
+        $fecha_nacimiento = Carbon::createFromFormat('Y-m-d',$fecha_nacimiento);
+        $edad = $fecha_nacimiento->diffInYears(carbon::now());
+        return $edad>=18?true:false;
+    }
+
 }

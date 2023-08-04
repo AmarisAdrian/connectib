@@ -81,8 +81,10 @@
                 Swal.fire({
                     icon: 'success',
                     title: '{{ session('success') }}'
-                });
+                });           
             </script>
+           {{  session()->forget('success') }}
+           {{  session()->forget('error') }}
         @endif
         @if(session()->has('error'))
             <script>
@@ -91,6 +93,8 @@
                     title: '{{ session('error') }}'
                 });
             </script>
+              {{  session()->forget('success') }}
+              {{  session()->forget('error') }}
         @endif
         </main>
        

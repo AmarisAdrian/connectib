@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\Validator;
 
 class User extends Authenticatable
 {
@@ -20,39 +17,30 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'cedula',
+        'nombre',
         'email',
+        'celular',
+        'codigo_ciudad',
+        'fecha_nacimiento',
         'password',
     ];
 
     public static $validacion = [
         'cedula' => 'required|integer',
-        'nombre' => 'required|string|max:255',
-        'celular' =>'integer',
-        'email' => 'required|email|unique:users|max:255',
+        'nombre' => 'required|string|max:100',
+        'email' => 'required|email|unique:users|max:100',
         'fecha_nacimiento' => 'required|date',
+        'codigo_ciudad' => 'required',
+        'password' => ['required', 'string', 'confirmed', 'min:8' ,'regex:/^(?=.*[A-Z])(?=.*\d).+$/']
     ];
-    public static function validarMayorEdad($attribute,$value,$parameters,$validator){
-        $fecha_nacimiento = Carbon::createFromFormat('Y-m-d',$value);
-        $edad = $fecha_nacimiento->diffInYears(carbon::now());
-        return $edad>=18;
-    }
-    public static function addUser($data){
-        $validator = Validator::make($data,self::$validacion);
-        if($validator->fails()){
-            return [
-                'success'=>false,
-                'errors'=> $validator->errors(),
-            ];
-        }
-        $data['password'] = bcrypt($data['password']);
-        $user = new self($data);
-        $user->save();
-        return [
-            'success'=>true,
-            'user'=> $user
-        ];
-    }
+    public static $validacionActualizar = [
+        'id' => 'integer',
+        'nombre' => 'required|string|max:100',
+        'celular' =>'integer',
+        'fecha_nacimiento' => 'required|date',
+        'password' => ['required', 'string', 'confirmed', 'min:8' ,'regex:/^(?=.*[A-Z])(?=.*\d).+$/']
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *

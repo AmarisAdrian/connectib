@@ -50,8 +50,8 @@
                             <td>{{$user->fecha_nacimiento}}</td>
                             <td>{{$user->edad}}</td>
                             <td>
-                                <a data-url="" type="button" class="btn btn-danger text-light"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                <a data-url="" type="button" class="btn btn-success text-light"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                <a data-url="{{route('usuario.deleteUser',$user->id)}}" type="button" class="btn btn_eliminar_usuario btn-danger text-light"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                <a data-url="{{route('usuario.getUser',$user->id)}}" type="button" class="btn btn-success text-light btn_modal_actualizar_usuario" data-bs-toggle="modal" data-bs-target="#modal_actualizar_usuario" ><i class="fa fa-pencil" aria-hidden="true"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -83,7 +83,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form method="POST" method="POST" action="{{route('usuario.addUser')}}">
+            <form method="POST" action="{{route('usuario.addUser')}}">
               <div class="row">
                 {{csrf_field()}}
                  <div class="mb-3">
@@ -101,7 +101,7 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label for="password_repeat">Repetir contraseña *</label>
-                        <input type="password" class="form-control border border-input" id="password_repeat" name="password_repeat" required>
+                        <input type="password" class="form-control border border-input" id="password_confirmation" name="password_confirmation" required>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -112,13 +112,13 @@
                 </div>
                  <div class="mb-3">
                     <div class="form-group">
-                        <label for="celular">Celular*</label>
+                        <label for="celular">Celular</label>
                         <input type="number" class="form-control border border-input" id="celular" name="celular">
                     </div>
                 </div>
                 <div class="mb-3">
                     <div class="form-group">
-                        <label for="cedula">cedula</label>
+                        <label for="cedula">cedula*</label>
                         <input type="number" class="form-control border border-input" id="cedula" name="cedula" required>
                     </div>
                 </div>   
@@ -142,15 +142,15 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label for="departamento">Departamento *</label>
-                        <select id="departamento" name="departamento"  data-url="{{url('/')}}/getCity/" class="form-control border border-input text-lowercase">
+                        <select id="departamento" name="departamento"  data-url="{{url('/')}}/getCity/" class="departamento form-control border border-input text-lowercase">
                             <option value="">-- Seleccionar --</option>
                         </select>
                     </div>
                 </div>
                 <div class="mb-3">
                     <div class="form-group">
-                        <label for="ciudad">Ciudad *</label>
-                        <select id="ciudad" name="ciudad" class="form-control border border-input text-lowercase">
+                        <label for="codigo_ciudad">Ciudad *</label>
+                        <select id="codigo_ciudad" name="codigo_ciudad" class="codigo_ciudad form-control border border-input text-lowercase">
                             <option value="">-- Seleccionar --</option>
 
                         </select>
@@ -158,13 +158,26 @@
                 </div>
                     <br><br>
                     <div class="form-group m-0">
-                        <button class="btn btn-primary" id="btn_guardar_usuario"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar usuario</button>
+                        <button class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar usuario</button>
                     </div>
                 </div>
             </form>
         </div>
      </div>
     </div>
+    </div>
+    <!--MODAL ACTUALIZAR USUARIO-->
+    <div class="modal fade" id="modal_actualizar_usuario"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" >
+            <div class="modal-header bg-primary text-light">
+                <h5 class="modal-title"><i class="fa fa-refresh" aria-hidden="true"></i>
+                    Actualizar usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body body_actualizar_usuario"></div>
+            </div>
+        </div>
     </div>
 </div>
 <script src="{{asset('assets/js/usuario.js')}}"></script>
