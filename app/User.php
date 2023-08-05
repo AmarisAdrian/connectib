@@ -19,16 +19,34 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nombre', 'email', 'cedula'
+        'cedula',
+        'nombre',
+        'email',
+        'celular',
+        'codigo_ciudad',
+        'fecha_nacimiento',
+        'password'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
+    public static $validacion = [
+        'cedula' => 'required|integer',
+        'nombre' => 'required|string|max:100',
+        'email' => 'required|email|unique:users|max:100',
+        'celular' => 'nullable|integer',
+        'fecha_nacimiento' => 'required|date',
+        'codigo_ciudad' => 'required|integer',
+        'password' => ['required', 'string', 'confirmed', 'min:8' ,'regex:/^(?=.*[A-Z])(?=.*\d).+$/']
     ];
+    public static $validacionActualizar = [
+        'id' => 'required|integer',
+        'nombre' => 'required|string|max:100',
+        'celular' =>'nullable|integer',
+        'fecha_nacimiento' => 'required|date',
+        'password' => ['required', 'string', 'confirmed', 'min:8' ,'regex:/^(?=.*[A-Z])(?=.*\d).+$/']
+    ];
+    public function isAdmin()
+    {
+        return $this->is_admin === 1;
+    }
 
 }

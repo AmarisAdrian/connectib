@@ -14,6 +14,7 @@ class userSeeder extends Seeder
     public function run()
     {
         DB::table('users')->truncate();
+        /*password: admin*/
         DB::table('users')->insert([
             'cedula' => 1101210215,
             'nombre' => 'Administrador',
@@ -21,7 +22,8 @@ class userSeeder extends Seeder
             'celular' => '3003003030',
             'codigo_ciudad' => '8001',
             'fecha_nacimiento' => '1994-03-31',
-            'password'=> '2a$12$mkPVFEveAyfeCcJbV0NVWuWscT3d3nv/7fAtj4zmcFFPShVUr2vwG '
+            'password'=> '$2y$10$xrlfGAF.t./2o0pHbBGh2OYFlxg5d7pUlaNrycvCwmlg19hBeycC2',
+            'is_admin' => true,
         ]);
     }
 }

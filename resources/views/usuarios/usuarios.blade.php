@@ -151,7 +151,7 @@
                     <div class="form-group">
                         <label for="codigo_ciudad">Ciudad *</label>
                         <select id="codigo_ciudad" name="codigo_ciudad" class="codigo_ciudad form-control border border-input text-lowercase">
-                            <option value="">-- Seleccionar --</option>
+                            <option value="-1" disabled>-- Seleccionar --</option>
 
                         </select>
                     </div>

@@ -16,31 +16,6 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'cedula',
-        'nombre',
-        'email',
-        'celular',
-        'codigo_ciudad',
-        'fecha_nacimiento',
-        'password',
-    ];
-
-    public static $validacion = [
-        'cedula' => 'required|integer',
-        'nombre' => 'required|string|max:100',
-        'email' => 'required|email|unique:users|max:100',
-        'fecha_nacimiento' => 'required|date',
-        'codigo_ciudad' => 'required',
-        'password' => ['required', 'string', 'confirmed', 'min:8' ,'regex:/^(?=.*[A-Z])(?=.*\d).+$/']
-    ];
-    public static $validacionActualizar = [
-        'id' => 'integer',
-        'nombre' => 'required|string|max:100',
-        'celular' =>'integer',
-        'fecha_nacimiento' => 'required|date',
-        'password' => ['required', 'string', 'confirmed', 'min:8' ,'regex:/^(?=.*[A-Z])(?=.*\d).+$/']
-    ];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -50,6 +25,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function isAdmin()
+    {
+        return $this->is_admin === 1;
+    }
 
     /**
      * The attributes that should be cast.

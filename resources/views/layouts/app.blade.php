@@ -34,9 +34,11 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <ul class="nav justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{route('usuario.userList') }}"><i class="fa fa-users" aria-hidden="true"></i> Usuarios</a>
-                    </li>
+                    @can('only-admin')
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{route('usuario.userList') }}"><i class="fa fa-users" aria-hidden="true"></i> Usuarios</a>
+                        </li>
+                    @endcan
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#"><i class="fa fa-connectdevelop" aria-hidden="true"></i>
                         Api rest</a>

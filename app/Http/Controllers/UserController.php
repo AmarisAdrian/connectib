@@ -74,7 +74,7 @@ class UserController extends Controller{
     @return void */
     public function addUser(request $request){
         try{
-           $data = $request->only('cedula','nombre','email','celular','codigo_ciudad','fecha_nacimiento','password','password_confirmation');
+           $data = $request->only("cedula","nombre","email","celular","codigo_ciudad","fecha_nacimiento","password","password_confirmation");
             $result = self::sendAddUser($data);
             if ($result['success']) {
                 session()->put("success","Usuario registrado exitosamente");
@@ -126,7 +126,7 @@ class UserController extends Controller{
      /* realiza las validaciones y luego registra los datos
     @return void */
     private static function sendAddUser($data){
-        $validator = Validator::make($data,modelUser::$validacion);
+        $validator = Validator::make($data,User::$validacion);
         if($validator->fails()){
             return [
                 'success'=>false,
@@ -152,7 +152,7 @@ class UserController extends Controller{
       /* realiza las validaciones y luego actualiza el suuario
     @return void */
     private static function sendaUpdateUser($data){
-        $validator = Validator::make($data,modelUser::$validacionActualizar);
+        $validator = Validator::make($data,User::$validacionActualizar);
         $mayor_edad = self::validarMayorEdad($data['fecha_nacimiento']);
         if($validator->fails()){
             return [
@@ -187,7 +187,7 @@ class UserController extends Controller{
     private static function validarMayorEdad($fecha_nacimiento){
         $fecha_nacimiento = Carbon::createFromFormat('Y-m-d',$fecha_nacimiento);
         $edad = $fecha_nacimiento->diffInYears(carbon::now());
-        return $edad>=18?true:false;
+        return  $edad>=18?true:false;;
     }
 
 }
