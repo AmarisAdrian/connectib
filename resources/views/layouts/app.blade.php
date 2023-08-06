@@ -40,7 +40,7 @@
                         </li>
                     @endcan
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#"><i class="fa fa-connectdevelop" aria-hidden="true"></i>
+                        <a class="nav-link active" aria-current="page" href="{{route('api.listPost') }}"><i class="fa fa-connectdevelop" aria-hidden="true"></i>
                         Api rest</a>
                     </li>
                 </ul>

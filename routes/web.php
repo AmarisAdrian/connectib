@@ -25,9 +25,5 @@ Route::middleware('auth')->group(function () {
         Route::get('/getUser/{id}', [App\Http\Controllers\UserController::class, 'getUser'])->name('usuario.getUser');
         Route::get('/deleteUser/{id}', [App\Http\Controllers\UserController::class, 'deleteUser'])->name('usuario.deleteUser');
     });
+     Route::get('/api', [App\Http\Controllers\ApiController::class, 'listPost'])->name('api.listPost');
 });
-
-
-    // Rutas para el panel de administración
-    Route::get('/admin/dashboard', 'AdminController@dashboard')->name('admin.dashboard');
-    // ... Otras rutas protegidas ...
